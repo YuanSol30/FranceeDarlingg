@@ -10,7 +10,12 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Playfair+Display:wght@600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="index.css?v=2" />
+    <style>
+      #mainContent[hidden] {
+        display: none !important;
+      }
+    </style>
   </head>
   <body>
     <section class="password-screen" id="passwordScreen" aria-label="Password entry">
@@ -36,7 +41,7 @@
       </div>
     </section>
 
-    <main class="page locked" id="mainContent">
+    <main class="page locked" id="mainContent" hidden>
       <section class="hero" aria-label="Farewell introduction">
         <p class="eyebrow">A letter for the memories</p>
         <h1>Before I fully let go</h1>
@@ -128,13 +133,9 @@
 
       function unlockPage() {
         passwordScreen.classList.add("hidden");
+        mainContent.hidden = false;
         mainContent.classList.remove("locked");
         document.body.classList.add("unlocked");
-        sessionStorage.setItem("farewellUnlocked", "true");
-      }
-
-      if (sessionStorage.getItem("farewellUnlocked") === "true") {
-        unlockPage();
       }
 
       passwordForm.addEventListener("submit", function (event) {
