@@ -13,7 +13,30 @@
     <link rel="stylesheet" href="index.css" />
   </head>
   <body>
-    <main class="page">
+    <section class="password-screen" id="passwordScreen" aria-label="Password entry">
+      <div class="password-card">
+        <p class="eyebrow">Private letter</p>
+        <h2>Enter the date</h2>
+        <p class="password-note">
+          This letter opens with the date our first interaction became a memory.
+        </p>
+        <form id="passwordForm" class="password-form">
+          <input
+            id="passwordInput"
+            type="password"
+            placeholder="MM-DD-YYYY"
+            aria-label="Password date"
+            autocomplete="off"
+            required
+          />
+          <button type="submit">Open letter</button>
+        </form>
+        <p class="password-hint">Hint: month-day-year</p>
+        <p class="password-error" id="passwordError" role="alert"></p>
+      </div>
+    </section>
+
+    <main class="page locked" id="mainContent">
       <section class="hero" aria-label="Farewell introduction">
         <p class="eyebrow">A letter for the memories</p>
         <h1>Before I fully let go</h1>
@@ -94,5 +117,41 @@
         </div>
       </section>
     </main>
+
+    <script>
+      const PASSWORDS = ["12-25-2024", "12/25/2024", "12252024", "December 25 2024"];
+      const passwordScreen = document.getElementById("passwordScreen");
+      const mainContent = document.getElementById("mainContent");
+      const passwordForm = document.getElementById("passwordForm");
+      const passwordInput = document.getElementById("passwordInput");
+      const passwordError = document.getElementById("passwordError");
+
+      function unlockPage() {
+        passwordScreen.classList.add("hidden");
+        mainContent.classList.remove("locked");
+        document.body.classList.add("unlocked");
+        sessionStorage.setItem("farewellUnlocked", "true");
+      }
+
+      if (sessionStorage.getItem("farewellUnlocked") === "true") {
+        unlockPage();
+      }
+
+      passwordForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const enteredPassword = passwordInput.value.trim().toLowerCase();
+        const isCorrect = PASSWORDS.some(function (password) {
+          return password.toLowerCase() === enteredPassword;
+        });
+
+        if (isCorrect) {
+          unlockPage();
+        } else {
+          passwordError.textContent = "Wrong date. Please try again.";
+          passwordInput.value = "";
+          passwordInput.focus();
+        }
+      });
+    </script>
   </body>
 </html>
